@@ -1,0 +1,16 @@
+To run the script, first insert all your .LHE files into the folder "lhefiles"
+	These need to be in the format events_50k_1.lhe, where 50k is the number of events, and 1 is the file number (increase this by 1 for every extra file of that size)
+
+
+cd into scripts/
+
+
+Edit the second line of the bash scripts "events_50k.sh" and "events_100k.sh" to enter how many .LHE files of that size you have. Also create new scripts for other size LHE files (ie 500k, 1M, etc.)
+	If you added new bash scripts, edit the main bash script "RUN.sh" and add new root -b -l -q ... lines for each new script.
+
+
+type the following commands:
+	chmod +x RUN.sh
+	./RUN.sh
+
+This will run the program, and output PDF's of all the graphs (located in the "output folder"), as well as a new tree.root file for re-plotting (use the MACRO lheplot.C to re-plot) 
