@@ -1,2 +1,0 @@
-# aMC-NLO
-# aMC-NLO
