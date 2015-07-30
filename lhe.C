@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7ed570339d9bb9fd7684a576bfbef14075581b1f
 #include <string>
 #include <ctime>
 #include <vector>
