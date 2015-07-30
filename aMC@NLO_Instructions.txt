@@ -1,0 +1,125 @@
+					aMC@NLO on Rivanna Instructions
+						By: Zack Carson
+
+
+//SETTING UP aMC@NLO//
+
+1) log into Rivanna via username@interactive.hpc.virginia.edu
+
+2) Download and untar the aMC@NLO package using the command:
+	wget https://launchpad.net/madgraph5/2.0/2.3.0/+download/MG5_aMC_v2.3.0.tar.gz
+
+3) create a symbolic link to the mg5_aMC script via:
+	ln -s MG5_aMC_v2_3_0/bin/mg5_aMC mg5
+
+4) Now you can run mg5 interactively using ./mg5, or submit SLURM jobs into Rivanna's queue (shown below)
+
+5) Your Rivanna account comes with threee places to store stuff:
+	a) Your private folder (~/private/): very limited space, use for aMC@NLO installation, slurm.bash scripts, etc.
+	b) Your scratch folder (/scratch/username/): large secure storage space available.  However, jobs submitted to the economy queue can NOT write to this space, you must 		   copy output over after.
+	c) Your temporary output folder (/bigtmp/username/ -- if username is not there, just create it): Large temporary storage space that the economy queue CAN write too. Make 
+	   sure you copy your files over to scratch afterwards.
+
+
+
+//USING aMC@NLO//
+
+0) Before launching aMC@NLO, always load the Rivanna's gcc module, or else it won't run correctly:
+	module load gcc
+
+1) Launch aMC@NLO via ./mg5
+
+2) Import models and definitions if needed (if doing a basic process such as ttbb 4fs, default settings are fine,) for example:
+	import model loop_sm-no_b_mass			(i.e. special model needed for tt0/1/2j 5fs pp collisions)
+	define p = u u~ d d~ c c~ s s~ b b~ g 		(i.e. redefine the profon in the 5fs)
+	define j = p					(likewise for the jets)
+
+3) Generate your process, for example if you are creating a single process:
+	generate p p > t t~ b b~ [QCD]			(generates a pp collision with FSR of top and bottom pairs.  The [QCD] flag runs the simulations in NLO, remove it for LO)
+	
+   or to FXFX multiple processes together, use:
+	generate p p > t t~ [QCD] @0
+	add process p p > t t~ j [QCD] @1
+	add process p p > t t~ j j [QCD] @2		(generates the three processes with FSR of 0/1/2 jets together)
+
+4) Output the process: create the working directory, generate matrix elements, Helas calls, feynman diagrams, andaloha routines before generation.  This takes some time      
+   depending on the process:
+	output name_of_process				(creates the working directory called name_of_process)
+
+5) Launch the process:
+	launch name_of_process
+
+6) The first option it waits for (60 seconds) is to toggle on or off Perturbative order, Fixed Order, Showering of events, and MadSpin Decay. These are toggled simply by typing 
+   the number of the option. If you want to skip or if you are done hit enter.
+
+7) The second option it waits for (60 seconds) is to edit the simulation card parameters (such as particle masses, number of events, random seed configuration, etc). You can 
+   edit those here, or manually at name_of_process/Cards/param_card.dat, name_of_process/Cards/run_card.dat, and name_of_process/Cards/shower_card.dat.  If you want to skip or  
+   if you are done hit enter. Examples:
+	set nevents 10000				(sets number of events to 10,000)
+	set param_card mass 6 172.5			(sets mass of the pdgid 6 -- top quark to 172.5)
+	set iseed 19827498				(sets the random seed configuration -- see 7a))
+
+7a) Random Seed Configurations:  the option iseed (integer) sets the configuration.  By default this is 0, which sets the seed as 1 for the first run, and increases it by an     
+    integer for each successive run afterwards.  This works fine if you plan to run all your simulations out of the same working directory name_of_process.  However, only ONE 
+    simulation can be run out of that directory at a time.  Thus, if you want to run multiple jobs simultaneously, you need to manually set the seed differently for each job. 
+    If this is not done, each job will get identical results at iseed = 1.  Any integer between 0 and 2^31 = 2,147,483,648 should work.
+
+8) Now the simulation will run. Once completed, it will output the results in the tarred .LHE files at name_of_process/Events/run01/events.lhe.gz
+
+
+
+//SUBMITTING SLURM JOBS TO RIVANNA//
+
+1) First, create a bash script (i.e. job.sh) with the commands to feed into aMC@NLO.  Example:
+
+	import model loop_sm-no_b_mass
+	define p = p b b~
+	define j = p
+	generate p p > t t~ [QCD] @0
+	add process p p > t t~ j [QCD] @1
+	add process p p > t t~ j j [QCD] @2
+	output /bigtmp/username/job
+	launch /bigtmp/username/job
+        	set nevents 10000
+		set iseed 46473
+
+	(This will run the process tt 0/1/2 jets, output the contents into /bigtmp/username/job, with 10000 events, and a seed value of 46473. Set any other param cards after 	the launch command. If you are using the economy queue, set the output to /bigtmp.  otherwise, use /scratch.)
+
+2) Next, create your slurm commands for the job (ie job.slurm). Example:
+
+	#!/bin/bash
+	#SBATCH --nodes=12
+	#SBATCH --ntasks-per-core=1
+	#SBATCH --mem-per-cpu=20000
+	#SBATCH -t 120:00:00
+	#SBATCH -o job.txt
+	#SBATCH --mail-type=ALL
+	#SBATCH --mail-user=zrc2hs@virginia.edu
+	#SBATCH -p economy
+	#SBATCH -A neuphysics
+
+	module load gcc
+
+	./mg5  job.sh
+
+	
+	(The first line sets the number of nodes to run, the second line sets the number of tasks per core, while the third sets the memory allocated per CPU.   the next line 	
+	sets the maximum wall limit.  Any job gone over this wall will be automatically killed.  The next line sets the interactive output from aMC@NLO to the text file named 	
+	job.txt.  The next 2 lines sets the email output. The next line sets the queue for the job to be ran in (economy, serial, parallel, etc. --  see http://
+	uvacse.virginia.edu/resources/rivanna/rivanna for details on all the queues).  The last line command the group to take SU's out of. Next it loads the gcc module as 
+	usual, then it runs aMC@NLO using commands from your bash script).
+
+3) The text output will then be in job.txt, while the results will be found in the directory /bigtmp/username/job
+
+
+
+//PROCESSING THE .LHE FILE//
+
+1) first untar the .lhe file
+
+2) run the program lhe.C (found at https://github.com/zackcarson/aMC-NLO/blob/master/lhe.C)
+	This will output a root file (tree.root) with all information required for re-plotting; pdfs of pt, p, et, e, eta, phi for b, b~, b+b~, t, t~, t+t~; and pdfs for the 
+	delta-eta, delta-phi, delta-R, and invariant mass for all bottom and top pairs.
+
+3) If you have multiple lhe files, use the scripts found in multiple_lhe, which merge together all .lhe files into one tree.root file, and plots it.
+
