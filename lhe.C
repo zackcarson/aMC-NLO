@@ -1580,7 +1580,7 @@ void lhe() {
 	clock_t begin = clock(); //Starts the clock
 	
 	
-//	lheparse(); //this is the function that is called by lhe.C, which then proceeds to run the two above functions in order.
+	lheparse(); //this is the function that is called by lhe.C, which then proceeds to run the two above functions in order.
 	lheplot();  //If you only want to plot from a previously saved tree_ttbb.root file, comment out the first line: lheparse();
 	
 	
