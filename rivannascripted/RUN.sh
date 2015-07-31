@@ -18,6 +18,7 @@ read seed
 echo "Enter your Rivanna username"
 read user
 
+mkdir -p scripts
 mkdir -p /bigtmp/$user
 mkdir -p /bigtmp/$user/scripted
 mkdir -p ~/private/output
