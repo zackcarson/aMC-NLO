@@ -1,0 +1,8 @@
+First run chmod +x RUN.sh
+
+Either edit the input.sh file for the commands, and run the script with them like:
+./RUN.sh < input.sh
+
+Or, run ./RUN.sh and manually enter the commands in. (Such as number of events per run, number of runs to submit, etc.
+
+This will create as many slurm and .sh scripts as you want, for N events, then submit them all to Rivanna and delete the scripts.
