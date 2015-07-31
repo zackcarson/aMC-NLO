@@ -126,7 +126,7 @@
 5) Run the bash script using the input file like so:
         ./RUN.sh < input.sh
 
-6) This will create the number of slurm/sh scripts you specified, submits them to Rivanna, and then removes the scripts. Output goes into your ~/private/output/scripted folder, a$
+6) This will create the number of slurm/sh scripts you specified, submits them to Rivanna, and then removes the scripts. Output goes into your ~/private/output/scripted folder, and results go to /bigtmp/username/scripted
 
 
 
