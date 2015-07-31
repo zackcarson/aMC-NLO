@@ -18,11 +18,13 @@ read seed
 echo "Enter your Rivanna username"
 read user
 
+<<<<<<< HEAD
+mkdir -p output
+=======
+>>>>>>> e37554e825c002c0dc21fa7d9e6d70b510dc3be4
 mkdir -p scripts
 mkdir -p /bigtmp/$user
 mkdir -p /bigtmp/$user/scripted
-mkdir -p ~/private/output
-mkdir -p ~/private/output/scripted
 
 for i in $(seq 1 $runs);
 
@@ -33,7 +35,7 @@ echo "#!/bin/bash
 #SBATCH --ntasks-per-core=$tasks
 #SBATCH --mem-per-cpu=$mem
 #SBATCH -t 120:00:00
-#SBATCH -o ~/private/output/scripted/ttbb$ev$i.txt
+#SBATCH -o output/ttbb$ev$i.txt
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=$user@virginia.edu
 #SBATCH -p $queue
@@ -41,7 +43,7 @@ echo "#!/bin/bash
 
 module load gcc
 
-~/private/./mg5  scripts/ttbb$ev$i.sh" > scripts/ttbb$ev$i.slurm
+~/private/./mg5 scripts/ttbb$ev$i.sh" > scripts/ttbb$ev$i.slurm
 
 echo "generate p p > t t~ b b~ [QCD]
 output /bigtmp/$user/scripted/ttbb$ev$i
@@ -53,4 +55,7 @@ sbatch scripts/ttbb$ev$i.slurm
 
 done
 
-rm scripts/*
+
+cd ~/private/output/scripted
+jobs
+
