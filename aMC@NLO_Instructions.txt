@@ -113,13 +113,32 @@
 
 
 
+//BASH SCRIPT FOR SUBMITTING MULTIPLE JOBS TO RIVANNA//
+
+1) Download the rivannascripted directory from github at https://github.com/zackcarson/aMC-NLO/tree/master/rivannascripted
+
+2) Place the folder somewhere on your rivanna account
+
+3) run chmod +x RUN.sh
+
+4) Edit the input.sh script to change values such as number of events to run per job, number of jobs you want to submit, etc..
+
+5) Run the bash script using the input file like so:
+        ./RUN.sh < input.sh
+
+6) This will create the number of slurm/sh scripts you specified, submits them to Rivanna, and then removes the scripts. Output goes into your ~/private/output/scripted folder, a$
+
+
+
+
+
 //PROCESSING THE .LHE FILE//
 
 1) first untar the .lhe file
 
 2) run the program lhe.C (found at https://github.com/zackcarson/aMC-NLO/blob/master/lhe.C)
-	This will output a root file (tree.root) with all information required for re-plotting; pdfs of pt, p, et, e, eta, phi for b, b~, b+b~, t, t~, t+t~; and pdfs for the 
-	delta-eta, delta-phi, delta-R, and invariant mass for all bottom and top pairs.
+        This will output a root file (tree.root) with all information required for re-plotting; pdfs of pt, p, et, e, eta, phi for b, b~, b+b~, t, t~, t+t~; and pdfs for the
+        delta-eta, delta-phi, delta-R, and invariant mass for all bottom and top pairs.
 
-3) If you have multiple lhe files, use the scripts found in multiple_lhe, which merge together all .lhe files into one tree.root file, and plots it.
+3) If you have multiple lhe files, use the scripts found in multiple_lhe(from Github at https://github.com/zackcarson/aMC-NLO/tree/master/multiple_lhe), which merge together all $
 
