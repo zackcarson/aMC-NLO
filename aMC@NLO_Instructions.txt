@@ -140,5 +140,5 @@
         This will output a root file (tree.root) with all information required for re-plotting; pdfs of pt, p, et, e, eta, phi for b, b~, b+b~, t, t~, t+t~; and pdfs for the
         delta-eta, delta-phi, delta-R, and invariant mass for all bottom and top pairs.
 
-3) If you have multiple lhe files, use the scripts found in multiple_lhe(from Github at https://github.com/zackcarson/aMC-NLO/tree/master/multiple_lhe), which merge together all $
+3) If you have multiple lhe files, use the scripts found in multiple_lhe(from Github at https://github.com/zackcarson/aMC-NLO/tree/master/multiple_lhe), which merge together all .lhe files into one tree.root file, and plots it.
 
