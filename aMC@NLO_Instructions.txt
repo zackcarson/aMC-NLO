@@ -1,6 +1,10 @@
 					aMC@NLO on Rivanna Instructions
 						By: Zack Carson
 
+UPDATE:  To fix non-zero status issue on ttbb production, you must compile without the IREGI library. This is done by either:
+1) moving into the cards directory in the process directory, and edit the line under #MLReductionLib to say 1|4|2.  This uses the other three libraries, and skips out on IREGI. O$
+2) When running the process interactively, type set "MLReductionLib 1|4|2" after launching the process, when it is waiting for input on card edits.
+3) If running from a bash script, simply add "set MLReductionLib 1|4|2" under "launch process"
 
 //SETTING UP aMC@NLO//
 
